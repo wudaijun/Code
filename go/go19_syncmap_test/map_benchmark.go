@@ -12,7 +12,7 @@ var syncMap *sync.Map
 
 func init() {
 	myMap = &MyMap{
-		m: make(map[int]int, 100),
+		m: make(map[int]int),
 	}
 
 	syncMap = &sync.Map{}
@@ -24,7 +24,7 @@ func mutexMapStore(k, v int) {
 	myMap.m[k] = v
 }
 
-func mutexMapLookup(k int) int {
+func mutexMapLoad(k int) int {
 	myMap.RLock()
 	defer myMap.RUnlock()
 	if v, ok := myMap.m[k]; !ok {
@@ -48,7 +48,7 @@ func syncMapStore(k, v int) {
 	syncMap.Store(k, v)
 }
 
-func syncMapLookup(k int) int {
+func syncMapLoad(k int) int {
 	v, ok := syncMap.Load(k)
 	if !ok {
 		return -1
